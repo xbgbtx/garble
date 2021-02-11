@@ -9,6 +9,12 @@ let langs = [ "en", "ar", "zh", "fr", "de", "it", "pt", "ru", "es" ];
 
 function change_state ( new_state )
 {
+    switch ( new_state )
+    {
+        case State.GARBLING :
+            clear_output ();
+            break;
+    }
     state = new_state;
 }
 
@@ -39,9 +45,12 @@ async function garble_text ( text )
         let source = langs [ i ];
         let target = langs [ (i+1) % langs.length ];
         console.log ( `${source} -> ${target}` );
-        let response = await translate_text ( text,source, target);
+        let response = await translate_text ( garbled_text,source, target);
         garbled_text = response.translatedText;
-        add_output (garbled_text);
+
+        let out = (i==langs.length-1) ? `<b>${garbled_text}</b>` :
+                                              garbled_text;
+        add_output ( out );
     }
 
 
@@ -56,6 +65,13 @@ function add_output ( text )
     let text_out = document.getElementById ( "output_div" );
 
     text_out.innerHTML += text + "<br>";
+}
+
+function clear_output ()
+{
+    let text_out = document.getElementById ( "output_div" );
+
+    text_out.innerHTML = "";
 }
 
 async function translate_text ( text, source_lang, target_lang )
