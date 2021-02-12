@@ -103,7 +103,7 @@ function clear_input ()
 function add_garble_output ( text )
 {
     let text_out = document.getElementById ( "garble_output_div" );
-    text_out.innerHTML += text + "<br>";
+    text_out.innerHTML = text + "<br>" + text_out.innerHTML;
 }
 
 function clear_garble_output ()
