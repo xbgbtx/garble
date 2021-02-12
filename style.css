@@ -2,6 +2,8 @@ body
 {
    background : #212;
    color : #EEF;
+   font-family: Impact, Charcoal, sans-serif;
+   font-size: 25px;
 }
 
 #root_div
