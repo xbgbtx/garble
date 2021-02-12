@@ -1,0 +1,20 @@
+body
+{
+   background : #212;
+   color : #EEF;
+}
+
+#root_div
+{
+   background : #000500;
+   max-width : 800px;
+   margin: 0 auto;
+   padding : 30px;
+}
+
+.results_display
+{
+   margin-bottom : 10px;
+   border: 1px solid #DDDDFF;
+   padding : 30px;
+}
