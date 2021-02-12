@@ -1,6 +1,7 @@
 let State = {
     AWAIT_INPUT : 1,
-    GARBLING : 2
+    GARBLING : 2,
+    DISPLAY_RESULT : 3
 }
 
 let state = State.AWAIT_INPUT;
@@ -12,13 +13,19 @@ function change_state ( new_state )
     switch ( new_state )
     {
         case State.GARBLING :
+            hide_div ( "input_div" );
             clear_output ();
+            break;
+
+        case State.AWAIT_INPUT :
+            show_div ( "input_div" );
+            //clear_output ();
             break;
     }
     state = new_state;
 }
 
-function form_submitted ()
+function do_garble_click ()
 {
     if ( state == State.AWAIT_INPUT )
     {
@@ -40,11 +47,13 @@ async function garble_text ( text )
 
     let garbled_text = text;
 
+    add_output ( `<em>${garbled_text}</em>` );
+
     for ( let i = 0; i< langs.length; i++ )
     {
         let source = langs [ i ];
         let target = langs [ (i+1) % langs.length ];
-        console.log ( `${source} -> ${target}` );
+
         let response = await translate_text ( garbled_text,source, target);
         garbled_text = response.translatedText;
 
@@ -54,10 +63,7 @@ async function garble_text ( text )
     }
 
 
-    //console.log ( result.translatedText );
-
-
-    change_state ( State.AWAIT_INPUT );
+    //change_state ( State.AWAIT_INPUT );
 }
 
 function add_output ( text )
@@ -72,6 +78,18 @@ function clear_output ()
     let text_out = document.getElementById ( "output_div" );
 
     text_out.innerHTML = "";
+}
+
+function hide_div ( id )
+{
+    let div = document.getElementById ( id );
+    div.style.display="none";
+}
+
+function show_div ( id )
+{
+    let div = document.getElementById ( id );
+    div.style.display="block";
 }
 
 async function translate_text ( text, source_lang, target_lang )
