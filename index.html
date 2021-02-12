@@ -16,7 +16,7 @@
 
     </head>
 
-    <body>
+    <body onload="page_loaded()" >
 
         <main>
            <h1>Garble</h1>
@@ -26,8 +26,16 @@
               <textarea id="text_in" rows="6" cols="78"></textarea><br><br>
               <button onclick="do_garble_click()">Garble</button>
            </div>
-           <div id="output_div">
-
+           <div id="garble_output_div">
+           </div>
+           <div id="results_output_div">
+              <div id="results_original_div"></div>
+              <div id="results_garbled_div"></div>
+              <div id="results_controls_div">
+                 <button onclick="do_another_click()">Do Another</button>
+                 <button>Garble Again</button>
+                 <button>Copy To Clipboard</button>
+              </div>
            </div>
         </main>
 

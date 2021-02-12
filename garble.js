@@ -1,10 +1,10 @@
 let State = {
-    AWAIT_INPUT : 1,
-    GARBLING : 2,
-    DISPLAY_RESULT : 3
+    AWAIT_INPUT     : 1,
+    GARBLING        : 2,
+    DISPLAY_RESULTS : 3
 }
 
-let state = State.AWAIT_INPUT;
+let state;
 
 let langs = [ "en", "ar", "zh", "fr", "de", "it", "pt", "ru", "es" ];
 
@@ -12,17 +12,37 @@ function change_state ( new_state )
 {
     switch ( new_state )
     {
-        case State.GARBLING :
-            hide_div ( "input_div" );
-            clear_output ();
+        case State.AWAIT_INPUT :
+            hide_div ( "results_output_div" );
+            hide_div ( "garble_output_div" );
+
+            show_div ( "input_div" );
+
             break;
 
-        case State.AWAIT_INPUT :
-            show_div ( "input_div" );
-            //clear_output ();
+        case State.GARBLING :
+            hide_div ( "input_div" );
+            hide_div ( "results_output_div" );
+
+            clear_garble_output ();
+            show_div ( "garble_output_div" );
+
+            break;
+
+        case State.DISPLAY_RESULTS :
+            hide_div ( "input_div" );
+            hide_div ( "garble_output_div" );
+
+            show_div ( "results_output_div" );
+
             break;
     }
     state = new_state;
+}
+
+function page_loaded ()
+{
+    change_state ( State.AWAIT_INPUT );
 }
 
 function do_garble_click ()
@@ -31,6 +51,14 @@ function do_garble_click ()
     {
         let text_in = document.getElementById ( "text_in" ).value;
         garble_text ( text_in )
+    }
+}
+
+function do_another_click ()
+{
+    if ( state == State.DISPLAY_RESULTS )
+    {
+        change_state ( State.AWAIT_INPUT );
     }
 }
 
@@ -47,7 +75,7 @@ async function garble_text ( text )
 
     let garbled_text = text;
 
-    add_output ( `<em>${garbled_text}</em>` );
+    add_garble_output ( `<em>${garbled_text}</em>` );
 
     for ( let i = 0; i< langs.length; i++ )
     {
@@ -59,25 +87,32 @@ async function garble_text ( text )
 
         let out = (i==langs.length-1) ? `<b>${garbled_text}</b>` :
                                               garbled_text;
-        add_output ( out );
+        add_garble_output ( out );
     }
 
-
-    //change_state ( State.AWAIT_INPUT );
+    set_results_output ( text, garbled_text )
+    change_state ( State.DISPLAY_RESULTS );
 }
 
-function add_output ( text )
+function add_garble_output ( text )
 {
-    let text_out = document.getElementById ( "output_div" );
-
+    let text_out = document.getElementById ( "garble_output_div" );
     text_out.innerHTML += text + "<br>";
 }
 
-function clear_output ()
+function clear_garble_output ()
 {
-    let text_out = document.getElementById ( "output_div" );
-
+    let text_out = document.getElementById ( "garble_output_div" );
     text_out.innerHTML = "";
+}
+
+function set_results_output ( text, garbled_text )
+{
+    let original_div = document.getElementById ( "results_original_div" );
+    original_div.innerHTML = text;
+
+    let garbled_div = document.getElementById ( "results_garbled_div" );
+    garbled_div.innerHTML = garbled_text;
 }
 
 function hide_div ( id )
