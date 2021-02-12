@@ -16,6 +16,7 @@ function change_state ( new_state )
             hide_div ( "results_output_div" );
             hide_div ( "garble_output_div" );
 
+            clear_input ();
             show_div ( "input_div" );
 
             break;
@@ -92,6 +93,11 @@ async function garble_text ( text )
 
     set_results_output ( text, garbled_text )
     change_state ( State.DISPLAY_RESULTS );
+}
+
+function clear_input ()
+{
+    document.getElementById ( "text_in" ).value = "";
 }
 
 function add_garble_output ( text )
