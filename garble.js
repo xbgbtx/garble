@@ -102,14 +102,16 @@ function clear_input ()
 
 function add_garble_output ( text )
 {
-    let text_out = document.getElementById ( "garble_output_div" );
-    text_out.innerHTML = text + "<br>" + text_out.innerHTML;
+    let garble_output_div = document.getElementById ( "garble_output_div" );
+
+    let output = `<div class="garble_display">${text}</div>`
+    garble_output_div.innerHTML = output + garble_output_div.innerHTML;
 }
 
 function clear_garble_output ()
 {
-    let text_out = document.getElementById ( "garble_output_div" );
-    text_out.innerHTML = "";
+    let garble_output_div = document.getElementById ( "garble_output_div" );
+    garble_output_div.innerHTML = "";
 }
 
 function set_results_output ( text, garbled_text )
