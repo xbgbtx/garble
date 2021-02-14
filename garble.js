@@ -133,7 +133,8 @@ function garble_step ( garble_data, step_cb, complete_cb )
         error_cb : error_cb
     }
 
-    translate_text ( translate_options );
+    setTimeout ( () => translate_text ( translate_options ),
+        500 );
 }
 
 async function translate_text ( translate_options, retries = 5 )
@@ -164,7 +165,7 @@ async function translate_text ( translate_options, retries = 5 )
             console.log("Slowing down...");
             setTimeout ( () =>
                 translate_text ( translate_options, retries - 1 ),
-                10000 );
+                30 * 1000 );
             return;
 
         default :
