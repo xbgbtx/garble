@@ -172,11 +172,13 @@ function page_loaded ()
 
 function do_garble_click ()
 {
-    if ( state == State.AWAIT_INPUT )
-    {
-        let text_in = document.getElementById ( "text_in" ).value;
+    if ( state != State.AWAIT_INPUT )
+        return;
+
+    let text_in = document.getElementById ( "text_in" ).value;
+
+    if ( text_in.length > 0 )
         garble_text ( text_in )
-    }
 }
 
 function do_another_click ()
