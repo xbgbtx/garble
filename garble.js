@@ -6,6 +6,7 @@ let State = {
 }
 
 let state;
+let last_result = "";
 
 function change_state ( new_state )
 {
@@ -88,11 +89,6 @@ class GarbleData
 
 function garble_text ( text )
 {
-    if ( state != State.AWAIT_INPUT )
-    {
-        return;
-    }
-
     let langs = [ "en", "ar", "zh", "fr", "de", "it", "pt", "ru", "es" ];
 
     change_state ( State.GARBLING );
@@ -189,6 +185,16 @@ function do_another_click ()
     }
 }
 
+function garble_again_click ()
+{
+    console.log(state);
+    if ( state != State.DISPLAY_RESULTS )
+        return;
+
+    garble_text ( last_result );
+
+}
+
 /****************************************************************************
  * DOM MANIPULATION
  ***************************************************************************/
@@ -219,6 +225,8 @@ function set_results_output ( text, garbled_text )
 
     let garbled_div = document.getElementById ( "results_garbled_div" );
     garbled_div.innerHTML = garbled_text;
+
+    last_result = garbled_text;
 }
 
 function hide_div ( id )
