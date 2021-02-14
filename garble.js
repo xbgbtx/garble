@@ -124,37 +124,71 @@ function garble_step ( garble_data, step_cb, complete_cb )
 
     let error_cb = () => change_state ( State.ERROR );
 
-    translate_text ( garble_data.garbled_text,
-                     garble_data.current_lang (), 
-                     garble_data.next_lang (), 
-                     next_step,
-                     error_cb
-    );
+    let translate_options = 
+    {
+        text : garble_data.garbled_text,
+        source_lang : garble_data.current_lang (),
+        target_lang : garble_data.next_lang (),
+        translation_cb : next_step,
+        error_cb : error_cb
+    }
+
+    translate_text ( translate_options );
 }
 
-function translate_text ( text, source_lang, target_lang, 
-                          translation_cb, error_cb )
+async function translate_text ( translate_options, retries = 5 )
 {
-    fetch ( "https://libretranslate.com/translate",
+    if ( retries <= 0 )
+    {
+        translate_options.error_cb ();
+        return;
+    }
+
+    let api_options = 
+    {
+        q : translate_options.text,
+        source : translate_options.source_lang,
+        target : translate_options.target_lang
+    };
+
+    const response = await call_translate_api ( api_options );
+
+    switch ( response.status )
+    {
+        case 200 :
+            let r_json = await response.json ();
+            translate_options.translation_cb ( r_json.translatedText );
+            break;
+
+        case 429 :
+            console.log("Slowing down...");
+            setTimeout ( () =>
+                translate_text ( translate_options, retries - 1 ),
+                10000 );
+            return;
+
+        default :
+            console.log ( response );
+            translate_options.error_cb ();
+            break;
+    }
+
+}
+
+async function call_translate_api ( options )
+{
+    const response = fetch ( "https://libretranslate.com/translate",
     {
         method : "POST",
         body : JSON.stringify ({
-            q : text,
-            source : source_lang,
-            target : target_lang
+            q : options.q,
+            source : options.source,
+            target : options.target
         }),
         headers: { "Content-Type": "application/json" }
-    })
-    .then ( response => 
-    {
-        if ( response.status == 200 )
-            return response;
-        else
-            throw "Bad response from API.";
-    })
-    .then ( response => response.json () )
-    .then ( result   => translation_cb ( result.translatedText ) )
-    .catch ( error   => error_cb () );
+    });
+
+    return response;
 }
 
 /****************************************************************************
