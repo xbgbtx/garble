@@ -222,6 +222,24 @@ function do_another_click ()
     }
 }
 
+function do_copy_click ()
+{
+    if ( state != State.DISPLAY_RESULTS )
+        return;
+
+    let result_div = document.getElementById ( "results_garbled_div" );
+
+    let selection = window.getSelection ();
+    let range = document.createRange ();
+
+    range.selectNodeContents ( result_div );
+
+    selection.removeAllRanges ();
+    selection.addRange ( range );
+
+    document.execCommand ( "Copy" );
+}
+
 function garble_again_click ()
 {
     console.log(state);
