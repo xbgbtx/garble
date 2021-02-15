@@ -27,3 +27,11 @@ body
    padding-bottom : 20px;
    border-bottom: 1px solid #DDDDFF;
 }
+
+#slowdown_div
+{
+   background : #AABC12;
+   color : #221133;
+   margin : 20px;
+   padding : 30px;
+}

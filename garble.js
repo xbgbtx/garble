@@ -15,6 +15,7 @@ function change_state ( new_state )
         hide_div ( "results_output_div" );
         hide_div ( "garble_output_div" );
         hide_div ( "error_div" );
+        hide_div ( "slowdown_div" );
     };
 
     switch ( new_state )
@@ -162,6 +163,7 @@ async function translate_text ( translate_options, retries = 5 )
             break;
 
         case 429 :
+            show_div ( "slowdown_div" );
             console.log("Slowing down...");
             setTimeout ( () =>
                 translate_text ( translate_options, retries - 1 ),
@@ -245,6 +247,8 @@ function add_garble_output ( text )
 
     let output = `<div class="garble_display">${text}</div>`
     garble_output_div.innerHTML = output + garble_output_div.innerHTML;
+
+    hide_div ( "slowdown_div" );
 }
 
 function clear_garble_output ()
