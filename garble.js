@@ -186,9 +186,12 @@ async function call_translate_api ( options )
         body : JSON.stringify ({
             q : options.q,
             source : options.source,
-            target : options.target
+            target : options.target,
+            format : "text"
         }),
-        headers: { "Content-Type": "application/json" }
+        headers: { 
+            "Content-Type": "application/json"
+        }
     });
 
     return response;
